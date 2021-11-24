@@ -51,7 +51,7 @@ export default function DashBoard() {
         const numValue = parseInt(value);
 
         // if the value is 0, alert message shows congratulations
-        if (numValue === 0) {
+        if (numValue <= 0) {
           alert('Congratulations!!!');
           reset();
           isSet = true;
