@@ -42,7 +42,7 @@ const styles = (theme) => ({
     },
   },
   stackLinks: {
-    mt: 4,
+    mt: 5,
   },
   // sepaaration of 1400px, the textcontent changes
   displaySmall: {
@@ -86,7 +86,7 @@ export default function Sidebar() {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={6}
+        spacing={7}
       >
         {/* each link has three display mode */}
         <Link 
