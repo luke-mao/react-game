@@ -68,7 +68,6 @@ const styles = (theme) => ({
 });
 
 export default function Sidebar() {
-  console.log(styles);
   const theme = useTheme();
 
   return (
@@ -97,7 +96,7 @@ export default function Sidebar() {
           <Typography sx={styles(theme).displayBig}>Home</Typography>
         </Link>
         <Link 
-          to='/tictac'
+          to='/tictactoe'
           component={RouterLink}
         >
           <Typography sx={styles(theme).displaySmall}>Ti</Typography>
