@@ -1,6 +1,8 @@
-import { Button, Typography } from '@mui/material';
-import { Box, typography } from '@mui/system';
+import { Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router';
+import DialogWindow from '../components/DialogWindow';
 
 // initial board
 const initialBoard = new Array(9).fill('');
@@ -23,20 +25,6 @@ const styles = {
     fontSize: '2em',
     color: 'black',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  message: {
-    backgroundColor: '#fff',
-    border: '1px solid #333',
-    height: '150px',
-    width: '300px',
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -213,13 +201,9 @@ export default function Tictac() {
   };
 
   // when the game finishes, the dialog pops out, 
-  // close dialog and reset the game
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-    setBoard(initialBoard);
-    setTotalMoves(0);
-    setIsPlayer1(true);
-  };
+  // close the dialog redirects the user to the home page.
+  const navigate = useNavigate();
+  const goToHomePage = () => navigate('/', { replace: true });
 
   return (
     <Box
@@ -234,32 +218,22 @@ export default function Tictac() {
           {content}
         </Box>
       ))}
-      {isDialogOpen 
-        ? <Box
-            sx={styles.message}
-          >
-            <Typography
-              sx={styles.fontSize}
-            >
-              {winner === '' ? 'No one wins' : `${winner} wins`}
-            </Typography>
-            <Typography
-              sx={styles.fontSize}
-            >
-              {`A total of ${totalMoves} were complete`}
-            </Typography>
-            <Button
-              sx={{ mt: 2 }}
-              variant='contained'
-              color='secondary'
-              size='small'
-              onClick={closeDialog}
-            >
-              OK
-            </Button>
-          </Box>
-        : <></>
-      }
+      <DialogWindow
+        isOpen={isDialogOpen}
+        buttonText='OK'
+        buttonOnClick={goToHomePage}
+      >
+        <Typography
+          sx={styles.messageText}
+        >
+          {winner === '' ? 'No one wins' : `${winner} wins`}
+        </Typography>
+        <Typography
+          sx={styles.messageText}
+        >
+          {`A total of ${totalMoves} were complete`}
+        </Typography>
+      </DialogWindow>
     </Box>
   )
 }
