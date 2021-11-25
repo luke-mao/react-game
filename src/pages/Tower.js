@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router';
 import DialogWindow from '../components/DialogWindow';
-import { Typography } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 
 const styles = {
   container: {
@@ -12,6 +12,7 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'center',
+    alignContent: 'space-around',
   },
   box: {
     width: '30%',
@@ -46,6 +47,13 @@ const styles = {
   },
   messageText: {
     fontSize: '14pt',
+  },
+  extraContent: {
+    mt: 2,
+    mb: 2,
+    width: '100%',
+    height: 'fit-content',
+    textAlign: 'center',
   }
 };
 
@@ -75,9 +83,6 @@ export default function Snek() {
   // every time moves the block at the top.
   // and that block on FROM must be smaller than the block on TO.
   const move = (idx) => {
-    console.log(`click on idx = ${idx}, and blockFrom = ${blockFrom}`);
-    console.log(board);
-
     if (blockFrom === null) {
       setBlockFrom(idx);
     }
@@ -124,6 +129,14 @@ export default function Snek() {
   const navigate = useNavigate();
   const goToHomePage = () => navigate('/', { replace: true });
 
+  // button click to reset the game
+  const resetGame = () => {
+    setTotalMoves(0);
+    setBlockFrom(null);
+    setIsDialogOpen(false);
+    setBoard(getInitialBoard(numBlocks));
+  };
+
   // set the 'top' for the block. 
   // take account of the total number of blocks in that container
   const blockBottomPosition = (idx, numBlocks) => {
@@ -132,36 +145,17 @@ export default function Snek() {
     };
   };
 
+  const blockFromStyle = (blockIdx) => {
+    console.log(`blockIdx = ${blockIdx}, blockFrom = ${blockFrom}, equal = ${blockIdx === blockFrom}`);
+    return {
+      backgroundColor: blockIdx === blockFrom ? '#8080805c' : 'transparent',
+    };
+  };
 
-  // ask the use number of blocks
-  useEffect(() => {
-    let inputNumBlocks = 3;
-    // while (true) {
-    //   let inputNumBlocks = prompt('Please enter the number of blocks (3, 4, or 5):');
-    //   inputNumBlocks.trim();
-
-    //   if (inputNumBlocks === '3') {
-    //     numBlocks = 3;
-    //     break;
-    //   }
-    //   else if (inputNumBlocks === '4') {
-    //     numBlocks = 4;
-    //     break;
-    //   }
-    //   else if (inputNumBlocks === '5') {
-    //     numBlocks = 5;
-    //     break;
-    //   }
-    //   else {
-        //    alert('Invalid input. Please input 3, 4, or 5.');
-        //  }
-    // }
-
-    // store the number of blocks
-    setNumBlocks(inputNumBlocks);
-
+  // input the board numBlocks, and output the initial board
+  const getInitialBoard = (numberBlocks) => {
     // now put the blocks onto the bar
-    const blocks = new Array(inputNumBlocks).fill([]);
+    const blocks = new Array(numberBlocks).fill([]);
     for (let i = 0; i < blocks.length; i++) {
       blocks[i] = {
         backgroundColor: colors[i],
@@ -169,18 +163,51 @@ export default function Snek() {
       }
     };
 
-    // reset the board, put all blocks on the left bar
-    setBoard([blocks, [], []]);
+    const initialBoard = [blocks, [], []];
+    return initialBoard;
+  }
+
+  // ask the use number of blocks
+  useEffect(() => {
+    let inputNumBlocks = 3;
+    while (true) {
+      const userInput = prompt('Please enter the number of blocks (3, 4, or 5):');
+
+      if (userInput !== '') {
+        userInput.trim();
+        if (userInput === '3' || userInput === '4' || userInput === '5') {
+          inputNumBlocks = parseInt(userInput);
+          break;
+        }
+      }
+
+      alert('Invalid input. Please enter 3, 4, or 5.');
+    }
+
+    // store the number of blocks
+    setNumBlocks(inputNumBlocks);
+    setBoard(getInitialBoard(inputNumBlocks));
   }, []);
 
   return (
     <Box
       sx={styles.container}
     >
+      <Box
+        sx={styles.extraContent}
+      >
+        <Typography
+          variant='h5'
+          fontFamily='Monospace'
+          color='text.primary'
+        >
+          One click to register the box 'From', and another click to register the box 'To'.
+        </Typography>
+      </Box>
       {board.map((blocks, idx) => (
         <Box
           key={idx}
-          sx={styles.box}
+          sx={{ ...styles.box, ...blockFromStyle(idx) }}
           onClick={() => move(idx)}
         >
           <Box
@@ -197,6 +224,18 @@ export default function Snek() {
           ))}
         </Box>
       ))}
+      <Box
+        sx={styles.extraContent}
+      >
+        <Button
+          variant='contained'
+          color='primary'
+          size='medium'
+          onClick={resetGame}
+        >
+          Reset
+        </Button>
+      </Box>
       <DialogWindow
         isOpen={isDialogOpen}
         buttonText='OK'
