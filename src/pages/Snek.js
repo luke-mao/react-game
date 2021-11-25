@@ -279,7 +279,7 @@ export default function Snek() {
             <Box
               key={`cell ${rowIdx} ${colIdx}`}
               sx={{...styles.cell, ...snakeAndFoodStyle(rowIdx, colIdx)}}
-            >{`${rowIdx},  ${colIdx}`}</Box>
+            />
           ))}
         </Box>
       ))}

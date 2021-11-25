@@ -17,7 +17,7 @@ export default function App() {
           <Route path='/home' element={<DashBoard/>}/>
           <Route path='/tictactoe' element={<Tictac/>}/>
           <Route path='/tower' element={<Tower/>}/>
-          <Route path='snek' element={<Snek/>}/>
+          <Route path='/snek' element={<Snek/>}/>
           
           {/* default and 404 page */}
           <Route path='/' element={<DashBoard/>}/>
