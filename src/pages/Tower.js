@@ -146,7 +146,6 @@ export default function Snek() {
   };
 
   const blockFromStyle = (blockIdx) => {
-    console.log(`blockIdx = ${blockIdx}, blockFrom = ${blockFrom}, equal = ${blockIdx === blockFrom}`);
     return {
       backgroundColor: blockIdx === blockFrom ? '#8080805c' : 'transparent',
     };
@@ -173,7 +172,7 @@ export default function Snek() {
     while (true) {
       const userInput = prompt('Please enter the number of blocks (3, 4, or 5):');
 
-      if (userInput !== '') {
+      if (userInput !== null && userInput !== '') {
         userInput.trim();
         if (userInput === '3' || userInput === '4' || userInput === '5') {
           inputNumBlocks = parseInt(userInput);
