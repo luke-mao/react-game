@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.js": "/react-game/static/js/main.47c596b5.chunk.js",
+    "main.js.map": "/react-game/static/js/main.47c596b5.chunk.js.map",
+    "runtime-main.js": "/react-game/static/js/runtime-main.a8de5e2f.js",
+    "runtime-main.js.map": "/react-game/static/js/runtime-main.a8de5e2f.js.map",
+    "static/js/2.ba05f69d.chunk.js": "/react-game/static/js/2.ba05f69d.chunk.js",
+    "static/js/2.ba05f69d.chunk.js.map": "/react-game/static/js/2.ba05f69d.chunk.js.map",
+    "index.html": "/react-game/index.html",
+    "static/js/2.ba05f69d.chunk.js.LICENSE.txt": "/react-game/static/js/2.ba05f69d.chunk.js.LICENSE.txt",
+    "static/media/logo.430d4ecb.png": "/react-game/static/media/logo.430d4ecb.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a8de5e2f.js",
+    "static/js/2.ba05f69d.chunk.js",
+    "static/js/main.47c596b5.chunk.js"
+  ]
+}
