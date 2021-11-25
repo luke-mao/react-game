@@ -25,7 +25,9 @@ ReactDOM.render(
     <ThemeProvider
       theme={theme}
     >
-      <BrowserRouter>
+      <BrowserRouter
+        basename='/react-game'
+      >
         <App />
       </BrowserRouter>
     </ThemeProvider>
