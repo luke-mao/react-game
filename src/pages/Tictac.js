@@ -1,5 +1,4 @@
-import { Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import DialogWindow from '../components/DialogWindow';
@@ -12,18 +11,12 @@ const styles = {
   box: {
     width: '100%',
     height: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   cell: {
-    width: '33%',
     height: '33%',
     m: 0,
     p: 0,
-    fontSize: '2em',
+    fontSize: '4em',
     color: 'black',
     display: 'flex',
     justifyContent: 'center',
@@ -194,17 +187,21 @@ export default function Tictac() {
   const goToHomePage = () => navigate('/', { replace: true });
 
   return (
-    <Box
+    <Grid
+      container
+      spacing={0}
       sx={styles.box}
     >
       {board.map((content, idx) => (
-        <Box
+        <Grid
+          item
+          xs={4}
           key={idx}
           sx={{...styles.cell, ...cellBorderStyle(idx), ...cellBackgroundColor(isPlayer1, content)}}
           onClick={() => play(idx)}
         >
           {content}
-        </Box>
+        </Grid>
       ))}
       <DialogWindow
         isOpen={isDialogOpen}
@@ -222,6 +219,6 @@ export default function Tictac() {
           {`A total of ${winner === 'Player 1' || winner === '' ? player1Moves : player2Moves} moves were complete`}
         </Typography>
       </DialogWindow>
-    </Box>
+    </Grid>
   )
 }

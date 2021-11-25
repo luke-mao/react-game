@@ -22,18 +22,20 @@ const styles = {
   box2: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
     mx: 2,
   },
   line2: {
     color: 'blue',
-    display: 'inline',
     fontFamily: 'Monospace',
+    display: 'inline',
   },
   button: {
+    mx: 4,
+    my: 2,
     display: 'inline',
-    ml: 5,
   },
 };
 
