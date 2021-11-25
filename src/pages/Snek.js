@@ -1,5 +1,7 @@
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system'
 import React, { useState, useEffect } from 'react'
+import DialogWindow from '../components/DialogWindow';
 
 const styles = {
   box: {
@@ -15,15 +17,25 @@ const styles = {
     width: '25px',
     height: '25px',
     border: '1px solid #000',
-  }
+  },
+  messageText: {
+    fontSize: '14pt',
+  },
 };
 
+// the head direction
 const LEFT = 1;
 const RIGHT = 2;
 const TOP = 3;
 const BOTTOM = 4;
 
+// the board is 10 * 10
 const CELL_NUMBER = 10;
+
+// game status
+const WIN = 5;
+const LOSE = 6;
+const UNDERGOING = 7;
 
 // initial snake location.
 // top left corner, and the cell to the right
@@ -44,6 +56,12 @@ export default function Snek() {
 
   // board
   const [board, setBoard] = useState([]);
+
+  // game status
+  const [gameStatus, setGameStatus] = useState(UNDERGOING);
+
+  // dialog after win or lose
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // a timer to increment every 0.5 seconds.
   // and use useEffect to monitor that timer, 
@@ -139,10 +157,23 @@ export default function Snek() {
     }
 
     setSnakeCells(newSnakeCells);
-  }
+
+    // now check the status
+    const gameStatus = checkGameStatus(newSnakeCells);
+    if (gameStatus !== UNDERGOING) {
+      setIsDialogOpen(true);
+      setGameStatus(gameStatus);
+
+      // also remove the listener and click
+    }
+  } 
 
   // another useEffect to run when the timer changes
-  useEffect(move, [timer]);
+  useEffect(() => {
+    if (gameStatus === UNDERGOING) {
+      move();
+    }
+  }, [timer, gameStatus]);
 
   // get random food location
   const getRandomFoodLocation = () => {
@@ -187,6 +218,55 @@ export default function Snek() {
     }
   };
 
+  // check if win or lose.
+  // win: snake length >= 20.
+  // lose: move beyond the board, move to a cell with itself
+  const checkGameStatus = (thisSnakeCells) => {
+    // input the latest snake cells, prevent the react update delay
+    if (thisSnakeCells.length >= 20) {
+      return WIN;
+    }
+
+    // only need to check if the head is beyond the board
+    const headCell = thisSnakeCells[0];
+    const beyond = headCell.rowIdx < 0 
+      || headCell.rowIdx >= CELL_NUMBER
+      || headCell.colIdx < 0 
+      || headCell.colIdx >= CELL_NUMBER
+    ;
+
+    if (beyond) {
+      return LOSE;
+    }
+
+    // check if hit itself, simply check if the head is the same with any other cells
+    let collide = false;
+    
+    for (let i = 1; i < thisSnakeCells.length; i++) {
+      if (headCell.rowIdx === thisSnakeCells[i].rowIdx && headCell.colIdx === thisSnakeCells[i].colIdx) {
+        collide = true;
+        break;
+      }
+    }
+
+    if (collide) {
+      return LOSE;
+    }
+
+    // finally, undergoing
+    return UNDERGOING;
+  };
+
+  // reset the game
+  const resetGame = () => {
+    setIsDialogOpen(false);
+    setHeadDirection(RIGHT);
+    setSnakeCells(INITIAL_SNAKE);
+    setFoodLocation(getRandomFoodLocation());
+    setGameStatus(UNDERGOING);
+    setTimer(0);
+  };
+
   return (
     <Box
       sx={styles.box}
@@ -203,6 +283,24 @@ export default function Snek() {
           ))}
         </Box>
       ))}
+      <DialogWindow
+        isOpen={isDialogOpen}
+        buttonText='Play again?'
+        buttonOnClick={resetGame}
+      >
+        {gameStatus === WIN
+          ? <Typography
+              sx={styles.messageText}
+            >
+              Congratulations!
+            </Typography>
+          : <Typography
+              sx={styles.messageText}
+            >
+              Oh no!
+            </Typography>
+        }
+      </DialogWindow>
     </Box>
   )
 }
