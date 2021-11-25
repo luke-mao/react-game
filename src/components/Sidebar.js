@@ -67,6 +67,33 @@ const styles = (theme) => ({
   }
 });
 
+// use typography, display when big scree or small screen
+function TextBigScreen ({ text }) {
+  const theme = useTheme();
+
+  return (
+    <Typography
+      variant='h6'
+      sx={styles(theme).displayBig}
+    >
+      {text}
+    </Typography>
+  );
+};
+
+function TextSmallScreen ({ text }) {
+  const theme = useTheme();
+
+  return (
+    <Typography
+      variant='h6'
+      sx={styles(theme).displaySmall}
+    >
+      {text}
+    </Typography>
+  );
+};
+
 export default function Sidebar() {
   const theme = useTheme();
 
@@ -85,36 +112,36 @@ export default function Sidebar() {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={7}
+        spacing={9}
       >
         {/* each link has three display mode */}
         <Link 
           to='/home'
           component={RouterLink}
         >
-          <Typography sx={styles(theme).displaySmall}>H</Typography>
-          <Typography sx={styles(theme).displayBig}>Home</Typography>
+          <TextSmallScreen text='H' />
+          <TextBigScreen text='Home'/>
         </Link>
         <Link 
           to='/tictactoe'
           component={RouterLink}
         >
-          <Typography sx={styles(theme).displaySmall}>Ti</Typography>
-          <Typography sx={styles(theme).displayBig}>Tictac</Typography>
+          <TextSmallScreen text='Ti' />
+          <TextBigScreen text='Tictac'/>
         </Link>
         <Link 
           to='/tower'
           component={RouterLink}
         >
-          <Typography sx={styles(theme).displaySmall}>To</Typography>
-          <Typography sx={styles(theme).displayBig}>Tower</Typography>
+          <TextSmallScreen text='To' />
+          <TextBigScreen text='Tower'/>
         </Link>
         <Link 
           to='/snek'
           component={RouterLink}
         >
-          <Typography sx={styles(theme).displaySmall}>S</Typography>
-          <Typography sx={styles(theme).displayBig}>Snek</Typography>
+          <TextSmallScreen text='S' />
+          <TextBigScreen text='Snek'/>
         </Link>
       </Stack>
     </Box>

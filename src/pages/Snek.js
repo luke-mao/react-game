@@ -2,11 +2,25 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system'
 import React, { useState, useEffect } from 'react'
 import DialogWindow from '../components/DialogWindow';
+import { decreaseNumGamesLeft } from '../utils/utils';
 
 const styles = {
   box: {
     width: '100%',
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleBox: {
+    width: '100%',
+    mb: 10,
+    textAlign: 'center',
+  },
+  boardWrapper: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -33,6 +47,7 @@ const BOTTOM = 4;
 const CELL_NUMBER = 10;
 
 // game status
+const WIN_LENGTH = 20;
 const WIN = 5;
 const LOSE = 6;
 const UNDERGOING = 7;
@@ -223,7 +238,9 @@ export default function Snek() {
   // lose: move beyond the board, move to a cell with itself
   const checkGameStatus = (thisSnakeCells) => {
     // input the latest snake cells, prevent the react update delay
-    if (thisSnakeCells.length >= 20) {
+    if (thisSnakeCells.length >= WIN_LENGTH) {
+      // update the record
+      decreaseNumGamesLeft(3);
       return WIN;
     }
 
@@ -271,18 +288,33 @@ export default function Snek() {
     <Box
       sx={styles.box}
     >
-      {board.map((row, colIdx) => (
-        <Box
-          key={`row ${colIdx}`}
+      <Box
+        sx={styles.titleBox}
+      >
+        <Typography
+          variant='h5'
+          fontFamily='Monospace'
+          color='text.primary'
         >
-          {row.map((cell, rowIdx) => (
-            <Box
-              key={`cell ${rowIdx} ${colIdx}`}
-              sx={{...styles.cell, ...snakeAndFoodStyle(rowIdx, colIdx)}}
-            />
-          ))}
-        </Box>
-      ))}
+          Use arrow keys on the keyboard to control.
+        </Typography>
+      </Box>
+      <Box
+        sx={styles.boardWrapper}
+      >
+        {board.map((row, colIdx) => (
+          <Box
+            key={`row ${colIdx}`}
+          >
+            {row.map((cell, rowIdx) => (
+              <Box
+                key={`cell ${rowIdx} ${colIdx}`}
+                sx={{...styles.cell, ...snakeAndFoodStyle(rowIdx, colIdx)}}
+              />
+            ))}
+          </Box>
+        ))}
+      </Box>
       <DialogWindow
         isOpen={isDialogOpen}
         buttonText='Play again?'

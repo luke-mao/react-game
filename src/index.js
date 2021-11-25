@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import { createTheme, ThemeProvider, responsiveFontSizes } from '@mui/material/styles';
 
 // change the theme to:
@@ -20,16 +20,16 @@ let theme = createTheme({
 
 theme = responsiveFontSizes(theme);
 
+// the github pages does not support BrowserRouter,
+// use HashRouter instead
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider
       theme={theme}
     >
-      <BrowserRouter
-        basename='/react-game'
-      >
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

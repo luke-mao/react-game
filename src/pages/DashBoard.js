@@ -1,6 +1,7 @@
 import { Button, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useState, useEffect } from 'react'
+import { getNumGamesLeft, resetNumGamesLeft } from '../utils/utils';
 
 const styles = {
   box: {
@@ -13,18 +14,20 @@ const styles = {
   },
   line1: {
     color: 'blue',
-    fontSize: '2em',
     fontFamily: 'Monospace',
+    mx: 1,
+    mb: 2,
+    textAlign: 'center',
   },
   box2: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    mx: 2,
   },
   line2: {
     color: 'blue',
-    fontSize: '2em',
     display: 'inline',
     fontFamily: 'Monospace',
   },
@@ -35,43 +38,25 @@ const styles = {
 };
 
 export default function DashBoard() {
-  const [numGamesLeft, setNumGamesLeft] = useState(3);
+  const [numGamesLeft, setNumGamesLeft] = useState(null);
 
   // after loading, check with local storage
   useEffect(() => {
-    // get from the local storage, check if the number if valid.
-    let isSet = false;
+    let record = getNumGamesLeft();
 
-    if (localStorage.getItem('numGamesLeft') !== null) {
-      // check the stored value
-      const value = localStorage.getItem('numGamesLeft');
-      const regex = /^\d+$/;
-
-      if (value.match(regex)) {
-        const numValue = parseInt(value);
-
-        // if the value is 0, alert message shows congratulations
-        if (numValue <= 0) {
-          alert('Congratulations!!!');
-          reset();
-          isSet = true;
-        }
-        else if (numValue <= 3) {
-          setNumGamesLeft(numValue);
-          isSet = true;
-        }
-      }
+    if (record === 0) {
+      alert('Congratulations on finishing all games!');
+      resetNumGamesLeft();
+      record = 3;
     }
 
-    if (!isSet) {
-      localStorage.setItem('numGamesLeft', '3');
-    }
+    setNumGamesLeft(record);
   }, []);
 
   // button onclick
   const reset = () => {
+    resetNumGamesLeft();
     setNumGamesLeft(3);
-    localStorage.setItem('numGamesLeft', '3');
   };
 
   return (
@@ -80,6 +65,7 @@ export default function DashBoard() {
     >
       <Typography
         sx={styles.line1}
+        variant='h5'
       >
         Please choose an option from the sidebar.
       </Typography>
@@ -88,6 +74,7 @@ export default function DashBoard() {
       >
         <Typography
           sx={styles.line2}
+          variant='h5'
         >
           {`Games left to win: ${numGamesLeft}`}
         </Typography>

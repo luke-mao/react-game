@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import { useNavigate } from 'react-router';
 import DialogWindow from '../components/DialogWindow';
 import { Typography, Button } from '@mui/material';
+import { decreaseNumGamesLeft } from '../utils/utils';
 
 const styles = {
   container: {
@@ -112,11 +113,9 @@ export default function Snek() {
         // also check if the game is completed.
         // the rule has restricted the move, so only check if the array length is enough.
         if (newBoard[2].length === numBlocks) {
+          // show dialog, and update record
           setIsDialogOpen(true);
-          
-          // update the localStorage
-          const numGamesLeft = parseInt(localStorage.getItem('numGamesLeft'));
-          localStorage.setItem('numGamesLeft', numGamesLeft - 1);
+          decreaseNumGamesLeft(2);
         }
       }
 

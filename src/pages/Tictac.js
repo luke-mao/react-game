@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import DialogWindow from '../components/DialogWindow';
+import { decreaseNumGamesLeft } from '../utils/utils';
 
 // initial board
 const initialBoard = new Array(9).fill('');
@@ -78,7 +79,8 @@ export default function Tictac() {
 
   // game result
   const [winner, setWinner] = useState('');
-  const [totalMoves, setTotalMoves] = useState(0);
+  const [player1Moves, setPlayer1Moves] = useState(0);
+  const [player2Moves, setPlayer2Moves] = useState(0);
 
   const play = (idx) => {
     // first check if the cell idx is empty. 
@@ -88,13 +90,20 @@ export default function Tictac() {
       return;
     }
 
+    // increment the moves
+    if (isPlayer1) {
+      setPlayer1Moves(player1Moves + 1);
+    }
+    else {
+      setPlayer2Moves(player2Moves + 1);
+    }
+
     const newBoard = [...board];
     newBoard[idx] = isPlayer1 ? 'o' : 'x';
     setBoard(newBoard);
 
     // check the game status
     const gameStatus = isComplete(newBoard);
-    console.log(`game status = ${gameStatus}`);
 
     if (gameStatus === UNDERGOING) {
       setIsPlayer1(!isPlayer1);
@@ -104,32 +113,11 @@ export default function Tictac() {
       if (gameStatus === WIN) {
         if (isPlayer1) {
           setWinner('Player 1');
-          
-          // the game is considered won if player1 wins the game
-          // get the value from localstorage
-          const numGamesLeft = localStorage.getItem('numGamesLeft');
-          const regex = /^\d+$/;
-
-          if (numGamesLeft !== null && numGamesLeft.match(regex)) {
-            const value = parseInt(numGamesLeft);
-            localStorage.setItem('numGamesLeft', `${value - 1}`);
-          }
-          else {
-            localStorage.setItem('numGamesLeft', 2);
-          }
+          decreaseNumGamesLeft(1);
         }
         else {
           setWinner('Player 2');
         }
-      }
-
-      // count total moves
-      const emptySlots = newBoard.filter((content) => content === '');
-      if (emptySlots.length % 2 === 0) {
-        setTotalMoves(emptySlots.length / 2 + 1);
-      }
-      else {
-        setTotalMoves(((emptySlots.length - 1) / 2 + 1) + 1);
       }
 
       setIsDialogOpen(true);
@@ -231,7 +219,7 @@ export default function Tictac() {
         <Typography
           sx={styles.messageText}
         >
-          {`A total of ${totalMoves} were complete`}
+          {`A total of ${winner === 'Player 1' || winner === '' ? player1Moves : player2Moves} moves were complete`}
         </Typography>
       </DialogWindow>
     </Box>
